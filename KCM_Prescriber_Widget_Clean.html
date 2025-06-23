@@ -1,0 +1,163 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KCM Prescriber</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      padding: 20px;
+      color: #333;
+    }
+    .widget {
+      background: #fff;
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      width: 90%;
+      margin: auto;
+    }
+    h2 {
+      margin-top: 0;
+      color: #0b66c2;
+    }
+    label {
+      display: block;
+      margin-top: 16px;
+      font-weight: bold;
+    }
+    select, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    button {
+      background-color: #0b66c2;
+      color: white;
+      font-weight: bold;
+      margin: 24px auto 0;
+      cursor: pointer;
+      display: block;
+      width: auto;
+      padding: 10px 20px;
+    }
+    .result {
+      background: #e8f3ff;
+      padding: 16px;
+      border-radius: 8px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="widget">
+    <h2>KCM Prescriber</h2>
+    <p>Not every customer needs the same conversation. Fill out the fields below to get a tailored KCM recommendation.</p>
+
+    <label for="health">Account Health</label>
+    <select id="health">
+      <option>Green</option>
+      <option>Yellow</option>
+      <option>Red</option>
+    </select>
+
+    <label for="renewal">Renewal Timeline</label>
+    <select id="renewal">
+      <option>< 3 months</option>
+      <option>3–6 months</option>
+      <option>> 6 months</option>
+    </select>
+
+    <label for="adoption">Product Adoption</label>
+    <select id="adoption">
+      <option>Low</option>
+      <option>Medium</option>
+      <option>High</option>
+    </select>
+
+    <label for="expansion">Expansion Opportunity</label>
+    <select id="expansion">
+      <option>Yes</option>
+      <option>No</option>
+    </select>
+
+    <label for="age">Account Age</label>
+    <select id="age">
+      <option>< 3 months</option>
+      <option>3–6 months</option>
+      <option>> 1 year</option>
+    </select>
+
+    <button id="submitBtn">Get Recommendation</button>
+
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    document.getElementById("submitBtn").addEventListener("click", function () {
+      const health = document.getElementById("health").value;
+      const renewal = document.getElementById("renewal").value;
+      const adoption = document.getElementById("adoption").value;
+      const expansion = document.getElementById("expansion").value;
+      const age = document.getElementById("age").value;
+      const resultDiv = document.getElementById("result");
+
+      let message = "";
+
+      if (age === "< 3 months" && renewal === "> 6 months") {
+        message = `<strong>Recommended:</strong> Kickoff & Alignment<br><br>
+        <em>Why this matters:</em> You're early in the relationship. Aligning now helps you establish roles, expectations, and shared goals.<br><br>
+        <strong>Skills to build:</strong><br>
+        • Teams: Identify key stakeholders and clarify who owns what.<br>
+        • Targets: Align on business priorities and define success.<br>
+        • Timelines: Lock in milestones early to avoid last-minute surprises.`;
+      } else if (renewal === "< 3 months" && health === "Red" && (adoption === "Medium" || adoption === "High")) {
+        message = `<strong>Recommended:</strong> Commercial Milestone + Value Review (Health-Check)<br><br>
+        <em>Why this matters:</em> You’re close to renewal, but trust may be low. Use a VR to show outcomes and rebuild confidence before negotiating.<br><br>
+        <strong>Skills to build:</strong><br>
+        • VR Skills (Unique Value, Value Delivered, Future Vision)<br>
+        • CM Skills (Negotiation, Buyer Journey Map, Closing Corridor)`;
+      } else if (renewal === "< 3 months" && health !== "Red" && (adoption === "Medium" || adoption === "High")) {
+        message = `<strong>Recommended:</strong> Commercial Milestone + Value Review<br><br>
+        <em>Why this matters:</em> Renewal is near. Show impact with a VR, then lead them into a clear commercial close.<br><br>
+        <strong>Skills to build:</strong><br>
+        • VR Skills (Unique Value, Value Delivered, Future Vision)<br>
+        • CM Skills (Negotiation, Buyer Journey Map, Closing Corridor)`;
+      } else if (health === "Red" && adoption === "Low") {
+        message = `<strong>Recommended:</strong> No formal KCM<br><br>
+        <em>Why this matters:</em> The foundation isn’t ready. Focus on fixing adoption before leading strategic conversations.<br><br>
+        <strong>Skills to build:</strong><br>
+        • Driving Adoption: Improve usage and unblock users.<br>
+        • Customer Engagement: Rebuild trust with tactical wins.`;
+      } else if ((health === "Green" || health === "Yellow") && adoption === "High" && expansion === "Yes") {
+        message = `<strong>Recommended:</strong> Value Review + Executive Engagement<br><br>
+        <em>Why this matters:</em> Reinforce past success, then elevate to execs to chart the path forward.<br><br>
+        <strong>Skills to build:</strong><br>
+        • VR Skills (Unique Value, Value Delivered, Future Vision)<br>
+        • EE Skills (Storytelling, Meeting Prep, High-Impact Questions)`;
+      } else if (renewal === "> 6 months" && adoption === "High" && health !== "Red") {
+        message = `<strong>Recommended:</strong> Executive Engagement<br><br>
+        <em>Why this matters:</em> You have the trust and traction to engage execs in forward-looking strategy.<br><br>
+        <strong>Skills to build:</strong><br>
+        • Storytelling: Build urgency through narrative.<br>
+        • Meeting Prep: Show up with relevance.<br>
+        • High-Impact Questions: Surface insights that matter.`;
+      } else {
+        message = `<strong>Recommended:</strong> Value Review<br><br>
+        <em>Why this matters:</em> The account is stable. It’s a good time to reinforce impact and uncover new needs.<br><br>
+        <strong>Skills to build:</strong><br>
+        • Unique Value: Make differentiation stick.<br>
+        • Value Delivered: Show tangible wins.<br>
+        • Future Vision: Tie next steps to their goals.`;
+      }
+
+      resultDiv.innerHTML = message;
+    });
+  </script>
+</body>
+</html>
